@@ -1,0 +1,678 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder - Sri Datta Sidhardha Kondeti</title>
+    <meta name="description"
+        content="Resume of Sri Datta Sidhardha Kondeti, Software Engineer skilled in Java, Python, React, and AWS.">
+    <meta name="author" content="Sri Datta Sidhardha Kondeti">
+    <meta name="keywords"
+        content="Software Engineer, Resume, Full Stack Developer, Java, Python, React, AWS, Data Science">
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Person",
+      "name": "Sri Datta Sidhardha Kondeti",
+      "jobTitle": "Software Engineer",
+      "email": "sridatta.k99@gmail.com",
+      "url": "https://linkedin.com/in/sri-datta-sidhardha-kondeti",
+      "address": {
+        "@type": "PostalAddress",
+        "addressLocality": "Kakinada",
+        "addressRegion": "Andhra Pradesh",
+        "addressCountry": "IN"
+      },
+      "alumniOf": [
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Indian Institute of Technology (IIT), Madras"
+        },
+        {
+          "@type": "CollegeOrUniversity",
+          "name": "Pydah College of Engineering"
+        }
+      ],
+      "knowsAbout": ["Java", "Python", "SQL", "React", "Spring Boot", "AWS"]
+    }
+    </script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Library for DOCX export -->
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Floating Toolbar Styling */
+        #floating-toolbar {
+            position: absolute;
+            display: none;
+            background: #1f2937;
+            color: white;
+            padding: 6px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+            pointer-events: auto;
+            animation: fadeIn 0.1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toolbar-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .toolbar-btn:hover {
+            background: #4b5563;
+        }
+
+        .toolbar-select {
+            background: #374151;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            padding: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .link-input {
+            background: #111827;
+            color: #60a5fa;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 11px;
+            width: 160px;
+            outline: none;
+        }
+
+        @media print {
+            body {
+                background-color: white;
+                font-family: Arial, Helvetica, sans-serif !important;
+                /* ATS friendly standard fonts */
+            }
+
+            .no-print,
+            #floating-toolbar {
+                display: none !important;
+            }
+
+            .print-visible {
+                display: inline-block !important;
+                text-decoration: none !important;
+                color: #2563eb !important;
+            }
+
+            .resume-container {
+                box-shadow: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 5mm 12mm !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            .item-group {
+                break-inside: avoid !important;
+                page-break-inside: avoid !important;
+            }
+
+            a {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+
+            .editable:empty::before {
+                content: "" !important;
+            }
+        }
+
+        .resume-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 8mm 15mm;
+            margin: 0.5rem auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            color: #111827;
+            position: relative;
+        }
+
+        .editable {
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .editable:hover {
+            border-color: #e5e7eb;
+            background-color: #f9fafb;
+        }
+
+        .editable:focus {
+            border-color: #3b82f6;
+            background-color: #fff;
+        }
+
+        .section-title {
+            border-bottom: 1.5px solid #111827;
+            margin-bottom: 0.25rem;
+            padding-bottom: 0.02rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            color: #111827;
+        }
+
+        .item-group {
+            position: relative;
+            margin-bottom: 0.35rem;
+            padding-left: 20px;
+            margin-left: -20px;
+        }
+
+        .controls {
+            position: absolute;
+            left: 0px;
+            top: 0;
+            display: none;
+            z-index: 50;
+            background: white;
+            border-radius: 4px;
+        }
+
+        .item-group:hover .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .btn-action {
+            padding: 2px 6px;
+            background: #ef4444;
+            color: white;
+            border-radius: 4px;
+            font-size: 10px;
+            cursor: pointer;
+            border: none;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-action:hover {
+            background: #dc2626;
+        }
+
+        .btn-add {
+            background: #10b981;
+            margin-left: 10px;
+        }
+
+        .btn-add:hover {
+            background: #059669;
+        }
+
+        .resume-list {
+            margin-left: 1.15rem;
+            margin-top: 0.1rem;
+            list-style-type: disc;
+            font-size: 0.81rem;
+            line-height: 1.3;
+        }
+
+        .resume-list li {
+            margin-bottom: 0.05rem;
+        }
+
+        header h1 {
+            line-height: 1.0;
+            margin-bottom: 0.05rem;
+        }
+
+        .github-link {
+            font-size: 0.72rem;
+            color: #2563eb !important;
+            /* Force color */
+            font-weight: 600;
+            text-decoration: underline;
+            margin-left: 8px;
+            cursor: pointer;
+            display: inline-block;
+            /* Ensure proper box model */
+            position: relative;
+            /* Ensure z-index works */
+            z-index: 10;
+        }
+
+        .github-link:focus {
+            background-color: transparent !important;
+            /* Ensure transparency */
+            outline: 2px solid #3b82f6;
+            z-index: 50;
+            color: #2563eb !important;
+            /* Ensure text visible */
+        }
+
+        .editable:focus {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Light background instead of solid white */
+            outline: 2px solid #3b82f6;
+            z-index: 20;
+            /* Bring to front on focus */
+        }
+    </style>
+</head>
+
+<body class="py-1">
+
+    <!-- Floating Format Bar -->
+    <div id="floating-toolbar" class="no-print">
+        <button class="toolbar-btn" onclick="formatDoc('bold')" title="Bold">B</button>
+        <button class="toolbar-btn" onclick="formatDoc('italic')" title="Italic" style="font-style: italic;">I</button>
+        <button class="toolbar-btn" onclick="formatDoc('underline')" title="Underline"
+            style="text-decoration: underline;">U</button>
+        <div class="h-6 w-px bg-gray-600 mx-1"></div>
+        <select class="toolbar-select" onchange="formatDoc('fontSize', this.value)" title="Font Size">
+            <option value="1">S</option>
+            <option value="3" selected>M</option>
+            <option value="5">L</option>
+            <option value="6">XL</option>
+        </select>
+        <div class="h-6 w-px bg-gray-600 mx-1"></div>
+        <button class="toolbar-btn" onclick="toggleUrlEditor()" title="Edit Link">🔗</button>
+        <!-- URL Editor Extension -->
+        <div id="url-editor-container" class="hidden flex items-center gap-2 border-l border-gray-600 pl-2 ml-1">
+            <span class="text-[10px] uppercase font-bold text-gray-400">URL:</span>
+            <input type="text" id="link-url-input" class="link-input" placeholder="https://..."
+                oninput="updateCurrentLink(this.value)">
+        </div>
+    </div>
+
+    <!-- Top Bar Controls -->
+    <div class="max-w-[210mm] mx-auto mb-2 flex justify-between items-center no-print px-4">
+        <div>
+            <h1 class="text-lg font-bold text-gray-800">SDE Resume Builder</h1>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="downloadDocx()"
+                class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1.5 px-4 rounded shadow transition-all flex items-center gap-2 text-xs">
+                Download .DOCX
+            </button>
+            <button onclick="triggerPrint()"
+                class="bg-black hover:bg-gray-800 text-white font-semibold py-1.5 px-4 rounded shadow transition-all flex items-center gap-2 text-xs">
+                Print to PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="resume-container" id="resume">
+        <!-- Header -->
+        <header class="text-center mb-3">
+            <h1 id="user-name" class="text-2xl font-bold uppercase tracking-tight editable" contenteditable="true">SRI
+                DATTA SIDHARDHA KONDETI</h1>
+            <p id="user-role" class="text-base text-gray-700 font-semibold editable" contenteditable="true">Software
+                Engineer</p>
+            <div
+                class="flex flex-row justify-center items-center gap-x-2 text-[0.76rem] text-gray-600 mt-0.5 font-medium whitespace-nowrap">
+                <span class="editable" contenteditable="true">+91 9100934066</span>
+                <span>|</span>
+                <span class="editable" contenteditable="true">sridatta.k99@gmail.com</span>
+                <span>|</span>
+                <span class="editable" contenteditable="true">linkedin.com/in/sri-datta-sidhardha-kondeti</span>
+                <span>|</span>
+                <span class="editable" contenteditable="true">github.com/sridatta-k</span>
+                <span>|</span>
+                <span class="editable" contenteditable="true">Andhra Pradesh, Kakinada</span>
+            </div>
+        </header>
+
+        <!-- Summary -->
+        <section class="mb-3">
+            <h2 class="section-title editable" contenteditable="true">Summary</h2>
+            <p class="text-[0.81rem] leading-snug text-gray-800 editable" contenteditable="true">
+                Highly motivated Software Engineering student skilled in Java, Python, SQL, and Kotlin (Android). Proven
+                experience building scalable systems and critical applications using React, Spring Boot, and AWS,
+                driving innovation in both web and mobile platforms.
+            </p>
+        </section>
+
+        <!-- Skills -->
+        <section class="mb-3">
+            <h2 class="section-title editable" contenteditable="true">Skills</h2>
+            <div class="grid grid-cols-1 gap-0.5 text-[0.81rem]">
+                <div class="flex"><span class="font-bold w-32 shrink-0 editable" contenteditable="true">•
+                        Languages:</span><span class="editable w-full" contenteditable="true">SQL, Java, Python, C++,
+                        HTML, Kotlin</span></div>
+                <div class="flex"><span class="font-bold w-32 shrink-0 editable" contenteditable="true">•
+                        Frameworks:</span><span class="editable w-full" contenteditable="true">Spring Boot, React,
+                        Next.js, Node.js</span></div>
+                <div class="flex"><span class="font-bold w-32 shrink-0 editable" contenteditable="true">•
+                        Databases/Cloud:</span><span class="editable w-full" contenteditable="true">DBMS, SQL, Supabase,
+                        Firebase, AWS (EC2, S3), Docker</span></div>
+                <div class="flex"><span class="font-bold w-32 shrink-0 editable" contenteditable="true">• Tools &
+                        APIs:</span><span class="editable w-full" contenteditable="true">GitHub API, REST API, Google
+                        Maps SDK, Vosk AI, Git, Cloudflare</span></div>
+            </div>
+        </section>
+
+        <!-- Experience -->
+        <section class="mb-3">
+            <div class="flex items-center mb-0.5">
+                <h2 class="section-title w-full editable" contenteditable="true">Experience</h2>
+                <button class="no-print btn-action btn-add" onclick="addItem('exp-list')">+</button>
+            </div>
+            <div id="exp-list">
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex justify-between font-bold text-gray-900 text-[0.83rem]">
+                        <span class="editable" contenteditable="true">Mentor | GirlScript Summer of Code (GSSOC)</span>
+                        <span class="editable" contenteditable="true">2025</span>
+                    </div>
+                    <ul class="resume-list">
+                        <li class="editable" contenteditable="true">Mentoring open-source contributors on full-stack and
+                            mobile development projects.</li>
+                        <li class="editable" contenteditable="true">Conducting code reviews and providing technical
+                            guidance on Kotlin, API integrations, and DBMS best practices.</li>
+                        <li class="editable" contenteditable="true">Facilitating collaboration within the community to
+                            streamline project workflows and open-source contributions.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Projects -->
+        <section class="mb-3">
+            <div class="flex items-center mb-0.5">
+                <h2 class="section-title w-full editable" contenteditable="true">Projects</h2>
+                <button class="no-print btn-action btn-add" onclick="addItem('project-list')">+</button>
+            </div>
+            <div id="project-list">
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex items-baseline text-gray-900 text-[0.83rem]">
+                        <span class="font-bold editable" contenteditable="true">Vasatey | Voice-Activated Safety
+                            Application</span>
+                        <a href="https://github.com/sridatta-k/vasatey" class="github-link print-visible editable"
+                            contenteditable="true">GitHub -></a>
+                    </div>
+                    <ul class="resume-list">
+                        <li class="editable" contenteditable="true">Engineered an Android safety application using
+                            Kotlin and Vosk for offline voice-triggered emergency protocols.</li>
+                        <li class="editable" contenteditable="true">Implemented Google Maps SDK for precise live
+                            tracking and integrated Supabase for secure alert management.</li>
+                        <li class="editable" contenteditable="true">Optimized user safety with real-time notifications
+                            to emergency contacts using reactive data streams.</li>
+                    </ul>
+                </div>
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex items-baseline text-gray-900 text-[0.83rem]">
+                        <span class="font-bold editable" contenteditable="true">Codeer.org | Online Compiler
+                            Platform</span>
+                        <a href="https://github.com/sridatta-k/codeer" class="github-link print-visible editable"
+                            contenteditable="true">GitHub -></a>
+                    </div>
+                    <ul class="resume-list">
+                        <li class="editable" contenteditable="true">Built a multi-language online compiler platform
+                            attracting 1,000+ monthly visitors using Next.js and React.</li>
+                        <li class="editable" contenteditable="true">Integrated GitHub APIs for secure authentication and
+                            direct code-to-repository push functionality.</li>
+                        <li class="editable" contenteditable="true">Deployed backend infrastructure with Judge0 and VPS
+                            hosting to handle high-concurrency code execution.</li>
+                    </ul>
+                </div>
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex items-baseline text-gray-900 text-[0.83rem]">
+                        <span class="font-bold editable" contenteditable="true">Automated Web Deployment Platform</span>
+                        <a href="#" class="github-link print-visible editable" contenteditable="true">GitHub -></a>
+                    </div>
+                    <ul class="resume-list">
+                        <li class="editable" contenteditable="true">Developed a web dashboard for efficient management
+                            and monitoring of multiple website deployments.</li>
+                        <li class="editable" contenteditable="true">Automated deployment pipelines using GitHub and
+                            Cloudflare DNS APIs for seamless production rollouts.</li>
+                        <li class="editable" contenteditable="true">Leveraged Supabase for persistent data storage and
+                            secure user session management.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
+
+        <!-- Education -->
+        <section class="mb-3">
+            <div class="flex items-center mb-0.5">
+                <h2 class="section-title w-full editable" contenteditable="true">Education</h2>
+                <button class="no-print btn-action btn-add" onclick="addItem('edu-list')">+</button>
+            </div>
+            <div id="edu-list">
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex justify-between font-bold text-gray-900 text-[0.83rem]">
+                        <span class="editable" contenteditable="true">BS in Data Science and Applications</span>
+                        <span class="editable" contenteditable="true">Present</span>
+                    </div>
+                    <div class="flex justify-between items-baseline text-[0.76rem]">
+                        <span class="text-gray-700 italic editable" contenteditable="true">Indian Institute of
+                            Technology (IIT), Madras</span>
+                        <span class="text-gray-800 editable" contenteditable="true">CGPA: 9.0</span>
+                    </div>
+                </div>
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <div class="flex justify-between font-bold text-gray-900 text-[0.83rem]">
+                        <span class="editable" contenteditable="true">B.Tech in Computer Science and Engineering</span>
+                        <span class="editable" contenteditable="true">Expected July 2028</span>
+                    </div>
+                    <div class="flex justify-between items-baseline text-[0.76rem]">
+                        <span class="text-gray-700 italic editable" contenteditable="true">Pydah College of
+                            Engineering</span>
+                        <span class="text-gray-800 editable" contenteditable="true">CGPA: 8.5</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Certifications -->
+        <section class="mb-3">
+            <h2 class="section-title editable" contenteditable="true">Certifications</h2>
+            <div class="text-[0.76rem] text-gray-800 editable leading-relaxed" contenteditable="true">
+                • <b>AWS Certified Cloud Practitioner</b> | AWS, 2025 • <b>Oracle Foundations AI Associate</b> | Oracle,
+                2025 • <b>Azure Fundamentals</b> | Microsoft, 2024 • <b>Modeling Data Relationships</b> | MongoDB, 2025
+            </div>
+        </section>
+
+        <!-- Languages -->
+        <section class="mb-1">
+            <h2 class="section-title editable" contenteditable="true">Languages Known</h2>
+            <div class="text-[0.76rem] text-gray-800 editable leading-relaxed" contenteditable="true">
+                English (Professional) • Hindi (Conversational) • Telugu (Native)
+            </div>
+        </section>
+    </div>
+
+    <script>
+        const toolbar = document.getElementById('floating-toolbar');
+        const urlEditor = document.getElementById('url-editor-container');
+        const urlInput = document.getElementById('link-url-input');
+        let currentLinkElement = null;
+
+        function getFileName() {
+            const nameEl = document.getElementById('user-name');
+            const name = nameEl ? nameEl.innerText.trim().replace(/\s+/g, '_') : 'Resume';
+            return `${name}_Resume`;
+        }
+
+        function triggerPrint() {
+            const originalTitle = document.title;
+            document.title = getFileName();
+            window.print();
+            setTimeout(() => { document.title = originalTitle; }, 500);
+        }
+
+        function formatDoc(cmd, val = null) {
+            document.execCommand(cmd, false, val);
+        }
+
+        function updateCurrentLink(val) {
+            if (currentLinkElement) {
+                currentLinkElement.setAttribute('href', val);
+            }
+        }
+
+        function toggleUrlEditor() {
+            if (urlEditor.classList.contains('hidden')) {
+                urlEditor.classList.remove('hidden');
+                urlInput.focus();
+            } else {
+                urlEditor.classList.add('hidden');
+            }
+        }
+
+        function handleSelection(e) {
+            // Prevent closing if clicking inside toolbar
+            if (e && e.target && toolbar.contains(e.target)) return;
+
+            const selection = window.getSelection();
+
+            // Link Context Logic
+            let target = selection.anchorNode ? (selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode) : null;
+            let link = target ? target.closest('a') : null;
+
+            if (link) {
+                currentLinkElement = link;
+                urlEditor.classList.remove('hidden');
+                urlInput.value = link.getAttribute('href') || '';
+                positionToolbar(link);
+                return;
+            } else {
+                urlEditor.classList.add('hidden');
+                currentLinkElement = null;
+            }
+
+            // Standard Text Formatting Logic
+            if (!selection.rangeCount || selection.isCollapsed) {
+                if (document.activeElement && document.activeElement.classList.contains('editable')) {
+                    positionToolbar(document.activeElement);
+                } else { toolbar.style.display = 'none'; }
+                return;
+            }
+
+            const range = selection.getRangeAt(0);
+            const parent = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
+            if (parent && parent.closest('.editable')) {
+                const rect = range.getBoundingClientRect();
+                toolbar.style.display = 'flex';
+                const leftPos = rect.left + (rect.width / 2) - (toolbar.offsetWidth / 2);
+                toolbar.style.left = `${Math.max(10, leftPos)}px`;
+                toolbar.style.top = `${window.scrollY + rect.top - toolbar.offsetHeight - 15}px`;
+            }
+        }
+
+        function positionToolbar(el) {
+            const rect = el.getBoundingClientRect();
+            toolbar.style.display = 'flex';
+            const leftPos = rect.left + (rect.width / 2) - (toolbar.offsetWidth / 2);
+            toolbar.style.left = `${Math.max(10, leftPos)}px`;
+            // Increased offset to -35 to avoid overlapping
+            toolbar.style.top = `${window.scrollY + rect.top - toolbar.offsetHeight - 35}px`;
+        }
+
+        function addItem(listId) {
+            const list = document.getElementById(listId);
+            if (!list || list.children.length === 0) return;
+            const template = list.children[0].cloneNode(true);
+            const editables = template.querySelectorAll('.editable');
+            editables.forEach(el => {
+                if (el.tagName === 'LI') el.innerText = 'New detail...';
+                else if (el.tagName === 'A') { el.innerText = 'GitHub ->'; el.setAttribute('href', '#'); }
+                else el.innerText = 'New Entry...';
+            });
+            list.appendChild(template);
+        }
+
+        function deleteItem(btn) {
+            const itemGroup = btn.closest('.item-group');
+            if (itemGroup) itemGroup.remove();
+            toolbar.style.display = 'none';
+        }
+
+        function downloadDocx() {
+            const content = document.getElementById('resume').innerHTML;
+            const style = "body{font-family:Arial;line-height:1.2;font-size:10pt;color:#111827;}.text-center{text-align:center;}.section-title{border-bottom:1pt solid #111827;text-transform:uppercase;font-weight:bold;margin-top:10px;margin-bottom:5px;font-size:11pt;}.flex{display:flex;justify-content:space-between;}.font-bold{font-weight:bold;}ul{margin-top:2px;margin-bottom:8px;}li{margin-bottom:2px;}a{color:#2563eb;text-decoration:underline;}";
+            const fullHtml = "<!DOCTYPE html><html><head><meta charset='utf-8'><style>" + style + "<" + "/style><" + "/head><body>" + content + "<" + "/body><" + "/html>";
+
+            if (typeof htmlDocx === 'undefined') {
+                alert('Error: html-docx library not loaded.');
+                return;
+            }
+
+            const converted = htmlDocx.asBlob(fullHtml);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(converted);
+            link.download = getFileName() + '.docx';
+            link.click();
+        }
+
+        // Global Event Listeners
+        document.addEventListener('mouseup', handleSelection);
+        document.addEventListener('keyup', handleSelection);
+        document.addEventListener('paste', function (e) {
+            if (e.target.classList.contains('editable')) {
+                e.preventDefault();
+                const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                document.execCommand('insertText', false, text);
+            }
+        });
+
+        // Click handler to prevent link activation during edit mode
+        document.getElementById('resume').addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                handleSelection();
+            }
+        });
+    </script>
+</body>
+
+</html>
