@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Security Learning Plan - Shadcn Theme</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --background: #09090b;
+            --foreground: #fafafa;
+            --card: #09090b;
+            --card-foreground: #fafafa;
+            --popover: #09090b;
+            --popover-foreground: #fafafa;
+            --primary: #fafafa;
+            --primary-foreground: #18181b;
+            --secondary: #27272a;
+            --secondary-foreground: #fafafa;
+            --muted: #27272a;
+            --muted-foreground: #a1a1aa;
+            --accent: #27272a;
+            --accent-foreground: #fafafa;
+            --destructive: #7f1d1d;
+            --destructive-foreground: #fafafa;
+            --border: #27272a;
+            --input: #27272a;
+            --ring: #d4d4d8;
+            --radius: 0.5rem;
+            
+            --success: #10b981;
+            --warning: #f59e0b;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', sans-serif;
+        }
+
+        body {
+            background-color: var(--background);
+            color: var(--foreground);
+            height: 100vh;
+            display: flex;
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        /* Layout */
+        .sidebar {
+            width: 280px;
+            background-color: var(--background);
+            border-right: 1px solid var(--border);
+            padding: 1.5rem 1rem;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow-y: auto;
+        }
+
+        .logo {
+            font-size: 1.125rem;
+            font-weight: 600;
+            margin-bottom: 2rem;
+            padding: 0 0.75rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: var(--foreground);
+        }
+
+        .nav-item {
+            padding: 0.5rem 0.75rem;
+            margin-bottom: 0.25rem;
+            border-radius: var(--radius);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            font-weight: 500;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: var(--muted-foreground);
+        }
+
+        .nav-item:hover {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+        }
+
+        .nav-item.active {
+            background-color: var(--accent);
+            color: var(--accent-foreground);
+            font-weight: 600;
+        }
+
+        .nav-badge {
+            background-color: var(--muted);
+            color: var(--foreground);
+            padding: 0.1rem 0.5rem;
+            border-radius: 9999px;
+            font-size: 0.75rem;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-badge {
+            background-color: var(--primary);
+            color: var(--primary-foreground);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 2.5rem 3rem;
+            overflow-y: auto;
+            background-color: var(--background);
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+        }
+
+        .header h1 {
+            font-size: 1.875rem;
+            font-weight: 700;
+            letter-spacing: -0.025em;
+        }
+
+        .progress-container {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .progress-text {
+            font-size: 0.875rem;
+            color: var(--muted-foreground);
+            font-weight: 500;
+            text-align: right;
+        }
+
+        .progress-bar-bg {
+            width: 200px;
+            height: 8px;
+            background-color: var(--secondary);
+            border-radius: 9999px;
+            overflow: hidden;
+        }
+
+        .progress-bar-fill {
+            height: 100%;
+            background-color: var(--primary);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        /* Table Content */
+        .table-container {
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            text-align: left;
+        }
+
+        th, td {
+            padding: 1rem;
+            vertical-align: middle;
+        }
+
+        th {
+            color: var(--muted-foreground);
+            font-weight: 500;
+            border-bottom: 1px solid var(--border);
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        td {
+            border-bottom: 1px solid var(--border);
+        }
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+        tr:hover td {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .tool-name {
+            font-weight: 500;
+            color: var(--foreground);
+        }
+
+        /* Badges/Tags */
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            border-radius: 9999px;
+            border: 1px solid var(--border);
+            padding: 0.125rem 0.625rem;
+            font-size: 0.75rem;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+
+        .badge.outline {
+            background-color: transparent;
+            color: var(--foreground);
+        }
+
+        .badge.secondary {
+            background-color: var(--secondary);
+            color: var(--secondary-foreground);
+            border-color: transparent;
+        }
+
+        /* Select/Inputs Shadcn Style */
+        .form-control {
+            display: flex;
+            height: 2.25rem;
+            width: 100%;
+            border-radius: var(--radius);
+            border: 1px solid var(--input);
+            background-color: transparent;
+            padding: 0.5rem 0.75rem;
+            font-size: 0.875rem;
+            color: var(--foreground);
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--ring);
+            box-shadow: 0 0 0 1px var(--ring);
+        }
+
+        .form-control::placeholder {
+            color: var(--muted-foreground);
+        }
+
+        .status-select {
+            cursor: pointer;
+            appearance: none;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23a1a1aa' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 0.5rem center;
+            background-size: 1em;
+            padding-right: 2rem;
+        }
+
+        .status-select option {
+            background-color: var(--background);
+            color: var(--foreground);
+        }
+
+        .status-select.completed { color: var(--success); border-color: rgba(16, 185, 129, 0.5); }
+        .status-select.in-progress { color: var(--warning); border-color: rgba(245, 158, 11, 0.5); }
+
+        /* Scrollbar */
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: var(--muted); border-radius: 10px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--muted-foreground); }
+    </style>
+</head>
+<body>
+
+    <div class="sidebar">
+        <div class="logo">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            CyberSecPlan
+        </div>
+        <div id="nav-container">
+            <!-- Nav items will be generated here -->
+        </div>
+    </div>
+
+    <div class="main-content">
+        <div class="header">
+            <div>
+                <h1 id="category-title">Foundations</h1>
+                <div style="margin-top: 10px;">
+                    <select id="role-filter" class="form-control" style="width: auto; display: inline-block; padding-right: 2.5rem; background-color: var(--secondary); cursor: pointer;" onchange="updateRoleFilter(this.value)">
+                        <option value="All">All Roles / Full Path</option>
+                        <option value="Fresher">Fresher / Entry-Level</option>
+                    </select>
+                </div>
+            </div>
+            <div class="progress-container">
+                <div class="progress-text">
+                    <div style="margin-bottom: 0.25rem;">Overall Progress</div>
+                    <div style="font-weight: 700; color: var(--foreground);"><span id="progress-text">0</span>%</div>
+                </div>
+                <div class="progress-bar-bg">
+                    <div class="progress-bar-fill" id="progress-bar"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-container">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Topic / Tool</th>
+                        <th style="width: 10%;">Priority</th>
+                        <th style="width: 15%;">Level</th>
+                        <th style="width: 15%;">Status</th>
+                        <th style="width: 15%;">Project</th>
+                        <th style="width: 20%;">Notes</th>
+                    </tr>
+                </thead>
+                <tbody id="table-body">
+                    <!-- Table rows will be generated here -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const planData = {
+            "Foundations": [
+                { name: "Networking Concepts (OSI, TCP/IP)", priority: "High", level: "Beginner" },
+                { name: "HTTP, HTTPS, DNS, DHCP", priority: "High", level: "Beginner" },
+                { name: "Linux Fundamentals", priority: "High", level: "Beginner" },
+                { name: "Windows & Active Directory", priority: "High", level: "Intermediate" },
+                { name: "Shell Scripting (Bash/PowerShell)", priority: "Medium", level: "Intermediate" },
+                { name: "Python for Security", priority: "High", level: "Intermediate" },
+                { name: "Cryptography Basics", priority: "High", level: "Beginner" },
+                { name: "PKI & Certificates", priority: "Medium", level: "Intermediate" }
+            ],
+            "Governance, Risk & Compliance (GRC)": [
+                { name: "Risk Assessment & Management", priority: "High", level: "Intermediate" },
+                { name: "NIST Cybersecurity Framework", priority: "High", level: "Beginner" },
+                { name: "ISO 27001", priority: "High", level: "Intermediate" },
+                { name: "CIS Controls", priority: "Medium", level: "Beginner" },
+                { name: "PCI-DSS, HIPAA, GDPR", priority: "Medium", level: "Intermediate" },
+                { name: "Security Auditing", priority: "Medium", level: "Advanced" },
+                { name: "Business Continuity (BCP/DRP)", priority: "High", level: "Intermediate" }
+            ],
+            "Identity & Access Management (IAM)": [
+                { name: "Authentication vs Authorization", priority: "High", level: "Beginner" },
+                { name: "Role-Based Access Control (RBAC)", priority: "High", level: "Intermediate" },
+                { name: "Single Sign-On (SSO) & SAML", priority: "High", level: "Intermediate" },
+                { name: "OAuth 2.0 & OIDC", priority: "High", level: "Advanced" },
+                { name: "Multi-Factor Authentication (MFA)", priority: "High", level: "Beginner" },
+                { name: "Privileged Access Management (PAM)", priority: "Medium", level: "Advanced" }
+            ],
+            "Defensive Security (Blue Team)": [
+                { name: "Security Operations Center (SOC)", priority: "High", level: "Beginner" },
+                { name: "SIEM (Splunk, ELK, QRadar)", priority: "High", level: "Intermediate" },
+                { name: "Log Analysis & Event Correlation", priority: "High", level: "Intermediate" },
+                { name: "Incident Response (IR)", priority: "High", level: "Intermediate" },
+                { name: "Endpoint Detection & Response (EDR)", priority: "High", level: "Intermediate" },
+                { name: "CrowdStrike / SentinelOne", priority: "Medium", level: "Advanced" },
+                { name: "Wazuh", priority: "Medium", level: "Intermediate" },
+                { name: "Network Intrusion Detection (IDS/IPS)", priority: "High", level: "Intermediate" },
+                { name: "Snort / Suricata", priority: "Medium", level: "Intermediate" },
+                { name: "Firewalls & WAF", priority: "High", level: "Beginner" },
+                { name: "Threat Intelligence", priority: "Medium", level: "Advanced" },
+                { name: "Digital Forensics", priority: "Low", level: "Advanced" },
+                { name: "Malware Analysis Basics", priority: "Low", level: "Advanced" }
+            ],
+            "Offensive Security (Red Team)": [
+                { name: "Ethical Hacking Methodologies", priority: "High", level: "Beginner" },
+                { name: "Reconnaissance & OSINT", priority: "High", level: "Beginner" },
+                { name: "Network Scanning (Nmap)", priority: "High", level: "Beginner" },
+                { name: "Vulnerability Scanning (Nessus, OpenVAS)", priority: "High", level: "Intermediate" },
+                { name: "Penetration Testing", priority: "High", level: "Advanced" },
+                { name: "Metasploit Framework", priority: "High", level: "Intermediate" },
+                { name: "Web App Hacking (Burp Suite)", priority: "High", level: "Intermediate" },
+                { name: "Social Engineering / Phishing", priority: "Medium", level: "Intermediate" },
+                { name: "Wi-Fi Hacking", priority: "Low", level: "Intermediate" },
+                { name: "Privilege Escalation", priority: "High", level: "Advanced" }
+            ],
+            "Application & Software Security": [
+                { name: "OWASP Top 10", priority: "High", level: "Beginner" },
+                { name: "Secure Coding Practices", priority: "High", level: "Intermediate" },
+                { name: "Static Analysis (SAST)", priority: "Medium", level: "Intermediate" },
+                { name: "Dynamic Analysis (DAST)", priority: "Medium", level: "Intermediate" },
+                { name: "Software Composition Analysis (SCA)", priority: "Medium", level: "Intermediate" },
+                { name: "Threat Modeling", priority: "Medium", level: "Advanced" },
+                { name: "API Security", priority: "High", level: "Intermediate" },
+                { name: "DevSecOps Integration", priority: "Medium", level: "Advanced" }
+            ],
+            "Cloud Security": [
+                { name: "Cloud Shared Responsibility Model", priority: "High", level: "Beginner" },
+                { name: "AWS/Azure/GCP Security Basics", priority: "High", level: "Intermediate" },
+                { name: "Cloud IAM", priority: "High", level: "Intermediate" },
+                { name: "Cloud Security Posture Management (CSPM)", priority: "Medium", level: "Advanced" },
+                { name: "Cloud Workload Protection (CWPP)", priority: "Medium", level: "Advanced" },
+                { name: "Container Security (Docker/K8s)", priority: "High", level: "Advanced" },
+                { name: "Zero Trust Architecture", priority: "Medium", level: "Advanced" }
+            ],
+            "Essential Tools (2028 & Beyond)": [
+                { name: "Nmap / Masscan (Network Recon)", priority: "High", level: "Beginner" },
+                { name: "Sysmon / Windows Event Viewer", priority: "High", level: "Intermediate" },
+                { name: "Wireshark / tcpdump (Packet Analysis)", priority: "High", level: "Beginner" },
+                { name: "Zeek / Suricata (Network Monitoring)", priority: "High", level: "Intermediate" },
+                { name: "Splunk / MS Sentinel (SIEM/SOAR)", priority: "High", level: "Beginner" },
+                { name: "CrowdStrike / SentinelOne (EDR/XDR)", priority: "High", level: "Beginner" },
+                { name: "Burp Suite Pro / OWASP ZAP (Web Testing)", priority: "High", level: "Intermediate" },
+                { name: "Metasploit / Cobalt Strike (Exploitation/C2)", priority: "High", level: "Advanced" },
+                { name: "Tenable Nessus / Qualys (Vulnerability Scanning)", priority: "High", level: "Beginner" },
+                { name: "BloodHound (Active Directory Analysis)", priority: "High", level: "Advanced" },
+                { name: "Hashcat / John the Ripper (Password Cracking)", priority: "Medium", level: "Intermediate" },
+                { name: "Autopsy / Volatility (Digital Forensics)", priority: "High", level: "Intermediate" },
+                { name: "YARA (Malware Research)", priority: "Medium", level: "Advanced" },
+                { name: "Ghidra / IDA Pro (Reverse Engineering)", priority: "Medium", level: "Advanced" },
+                { name: "Maltego / Shodan (OSINT)", priority: "High", level: "Beginner" },
+                { name: "Trivy / Kube-bench (Container Security)", priority: "High", level: "Intermediate" },
+                { name: "Wiz / Prisma Cloud (CNAPP/CSPM)", priority: "High", level: "Intermediate" },
+                { name: "Snyk / Checkmarx (AppSec/SAST)", priority: "High", level: "Intermediate" },
+                { name: "Okta / CyberArk (IAM/PAM)", priority: "High", level: "Intermediate" },
+                { name: "AI/LLM Security Scanners", priority: "High", level: "Intermediate" }
+            ],
+            "Resume Standout Projects (Free Tools)": [
+                { name: "Project 1: Full SOC & SIEM Home Lab (VirtualBox, Ubuntu, Splunk Free, Sysmon, Nmap)", priority: "High", level: "Intermediate" },
+                { name: "Project 2: Cloud Security Audit & Remediation (AWS Free Tier, Prowler, Terraform, IAM)", priority: "High", level: "Intermediate" },
+                { name: "Project 3: Web App Pentesting & DevSecOps Pipeline (GitHub Actions, OWASP ZAP, Python)", priority: "High", level: "Advanced" }
+            ]
+        };
+
+        let currentCategory = "Foundations";
+        let userProgress = JSON.parse(localStorage.getItem('cybersecPlanProgress')) || {};
+        let currentRole = localStorage.getItem('cybersecPlanRole') || "All";
+
+        const fresherTools = [
+            "Networking Concepts (OSI, TCP/IP)", "HTTP, HTTPS, DNS, DHCP", "Linux Fundamentals", "Windows & Active Directory",
+            "Python for Security", "Cryptography Basics",
+            "NIST Cybersecurity Framework", 
+            "Authentication vs Authorization", "Multi-Factor Authentication (MFA)",
+            "Security Operations Center (SOC)", "SIEM (Splunk, ELK, QRadar)", "Log Analysis & Event Correlation",
+            "Firewalls & WAF", "Network Intrusion Detection (IDS/IPS)",
+            "Ethical Hacking Methodologies", "Reconnaissance & OSINT", "Network Scanning (Nmap)", "Vulnerability Scanning (Nessus, OpenVAS)",
+            "OWASP Top 10", "Web App Hacking (Burp Suite)",
+            "Cloud Shared Responsibility Model",
+            "Nmap / Masscan (Network Recon)", "Sysmon / Windows Event Viewer", "Wireshark / tcpdump (Packet Analysis)", "Splunk / MS Sentinel (SIEM/SOAR)", "CrowdStrike / SentinelOne (EDR/XDR)", "Tenable Nessus / Qualys (Vulnerability Scanning)", "Burp Suite Pro / OWASP ZAP (Web Testing)", "Maltego / Shodan (OSINT)",
+            "Project 1: Full SOC & SIEM Home Lab (VirtualBox, Ubuntu, Splunk Free, Sysmon, Nmap)",
+            "Project 2: Cloud Security Audit & Remediation (AWS Free Tier, Prowler, Terraform, IAM)",
+            "Project 3: Web App Pentesting & DevSecOps Pipeline (GitHub Actions, OWASP ZAP, Python)"
+        ];
+
+        function init() {
+            document.getElementById('role-filter').value = currentRole;
+            renderNav();
+            renderTable();
+            updateOverallProgress();
+        }
+
+        function updateRoleFilter(role) {
+            currentRole = role;
+            localStorage.setItem('cybersecPlanRole', role);
+            renderNav();
+            renderTable();
+            updateOverallProgress();
+        }
+
+        function getFilteredTools(category) {
+            if (currentRole === 'Fresher') {
+                return planData[category].filter(t => fresherTools.includes(t.name));
+            }
+            return planData[category];
+        }
+
+        function renderNav() {
+            const navContainer = document.getElementById('nav-container');
+            navContainer.innerHTML = '';
+            
+            let firstValidCategory = null;
+
+            Object.keys(planData).forEach(category => {
+                const tools = getFilteredTools(category);
+                if (tools.length === 0) return; // Hide empty categories
+
+                if (!firstValidCategory) firstValidCategory = category;
+
+                const item = document.createElement('div');
+                item.className = `nav-item ${category === currentCategory ? 'active' : ''}`;
+                item.onclick = () => {
+                    currentCategory = category;
+                    renderNav();
+                    renderTable();
+                };
+
+                const title = document.createElement('span');
+                title.textContent = category;
+
+                const badge = document.createElement('span');
+                badge.className = 'nav-badge';
+                badge.textContent = tools.length;
+
+                item.appendChild(title);
+                item.appendChild(badge);
+                navContainer.appendChild(item);
+            });
+
+            if (getFilteredTools(currentCategory).length === 0 && firstValidCategory) {
+                currentCategory = firstValidCategory;
+                setTimeout(() => { renderNav(); renderTable(); }, 0);
+            }
+        }
+
+        function renderTable() {
+            document.getElementById('category-title').textContent = currentCategory;
+            const tbody = document.getElementById('table-body');
+            tbody.innerHTML = '';
+
+            const tools = getFilteredTools(currentCategory);
+
+            tools.forEach(tool => {
+                const tr = document.createElement('tr');
+                
+                // Initialize default state if not exists
+                if(!userProgress[tool.name]) {
+                    userProgress[tool.name] = { status: 'not-started', project: '', notes: '' };
+                }
+
+                const state = userProgress[tool.name];
+
+                tr.innerHTML = `
+                    <td>
+                        <div class="tool-name">${tool.name}</div>
+                    </td>
+                    <td><span class="badge outline">${tool.priority}</span></td>
+                    <td><span class="badge secondary">${tool.level}</span></td>
+                    <td>
+                        <select class="form-control status-select ${state.status}" onchange="updateStatus(this, '${tool.name}')">
+                            <option value="not-started" ${state.status === 'not-started' ? 'selected' : ''}>○ Not Started</option>
+                            <option value="in-progress" ${state.status === 'in-progress' ? 'selected' : ''}>◐ In Progress</option>
+                            <option value="completed" ${state.status === 'completed' ? 'selected' : ''}>● Completed</option>
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Project name" value="${state.project}" onchange="saveData('${tool.name}', 'project', this.value)">
+                    </td>
+                    <td>
+                        <input type="text" class="form-control" placeholder="Notes..." value="${state.notes}" onchange="saveData('${tool.name}', 'notes', this.value)">
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function updateStatus(selectElement, toolName) {
+            const newStatus = selectElement.value;
+            selectElement.className = `form-control status-select ${newStatus}`;
+            saveData(toolName, 'status', newStatus);
+            updateOverallProgress();
+        }
+
+        function saveData(toolName, key, value) {
+            if(!userProgress[toolName]) userProgress[toolName] = {};
+            userProgress[toolName][key] = value;
+            localStorage.setItem('cybersecPlanProgress', JSON.stringify(userProgress));
+        }
+
+        function updateOverallProgress() {
+            let total = 0;
+            let completed = 0;
+
+            Object.keys(planData).forEach(category => {
+                const tools = getFilteredTools(category);
+                tools.forEach(tool => {
+                    total++;
+                    if(userProgress[tool.name] && userProgress[tool.name].status === 'completed') {
+                        completed++;
+                    }
+                });
+            });
+
+            const percentage = total === 0 ? 0 : Math.round((completed / total) * 100);
+            document.getElementById('progress-text').textContent = percentage;
+            document.getElementById('progress-bar').style.width = `${percentage}%`;
+        }
+
+        init();
+    </script>
+</body>
+</html>
