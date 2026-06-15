@@ -287,7 +287,15 @@
 
     <div class="main-content">
         <div class="header">
-            <h1 id="category-title">Foundations</h1>
+            <div>
+                <h1 id="category-title">Foundations</h1>
+                <div style="margin-top: 10px;">
+                    <select id="role-filter" class="form-control" style="width: auto; display: inline-block; padding-right: 2.5rem; background-color: var(--secondary); cursor: pointer;" onchange="updateRoleFilter(this.value)">
+                        <option value="All">All Roles / Full Path</option>
+                        <option value="Fresher">Fresher / Entry-Level</option>
+                    </select>
+                </div>
+            </div>
             <div class="progress-container">
                 <div class="progress-text">
                     <div style="margin-bottom: 0.25rem;">Overall Progress</div>
@@ -332,7 +340,9 @@
                 { name: "Python", priority: "High", level: "Beginner" },
                 { name: "SQL", priority: "High", level: "Beginner" },
                 { name: "PostgreSQL", priority: "High", level: "Intermediate" },
-                { name: "MySQL", priority: "Medium", level: "Intermediate" }
+                { name: "MySQL", priority: "Medium", level: "Intermediate" },
+                { name: "Azure Fundamentals", priority: "Medium", level: "Beginner" },
+                { name: "GCP Fundamentals", priority: "Medium", level: "Beginner" }
             ],
             "AWS Cloud": [
                 { name: "AWS IAM", priority: "High", level: "Beginner" },
@@ -377,7 +387,9 @@
                 { name: "Docker Hub", priority: "High", level: "Beginner" },
                 { name: "Nginx", priority: "High", level: "Intermediate" },
                 { name: "Apache HTTP Server", priority: "Low", level: "Intermediate" },
-                { name: "HAProxy", priority: "Medium", level: "Advanced" }
+                { name: "HAProxy", priority: "Medium", level: "Advanced" },
+                { name: "Traefik", priority: "Medium", level: "Intermediate" },
+                { name: "Kong API Gateway", priority: "Medium", level: "Advanced" }
             ],
             "CI/CD": [
                 { name: "CI/CD Concepts", priority: "High", level: "Beginner" },
@@ -458,24 +470,82 @@
                 { name: "High Availability", priority: "High", level: "Intermediate" },
                 { name: "Disaster Recovery", priority: "High", level: "Advanced" },
                 { name: "Blue-Green Deployment", priority: "High", level: "Intermediate" },
-                { name: "Canary Deployment", priority: "High", level: "Intermediate" }
+                { name: "Canary Deployment", priority: "High", level: "Intermediate" },
+                { name: "Chaos Engineering", priority: "Medium", level: "Advanced" },
+                { name: "Gremlin / Chaos Mesh", priority: "Low", level: "Advanced" }
+            ],
+            "FinOps & Cost Management": [
+                { name: "Cloud Cost Optimization", priority: "High", level: "Intermediate" },
+                { name: "AWS Cost Explorer", priority: "High", level: "Intermediate" },
+                { name: "Infracost", priority: "Medium", level: "Advanced" },
+                { name: "Kubecost", priority: "Medium", level: "Advanced" }
+            ],
+            "Platform Engineering": [
+                { name: "Internal Developer Portals (IDP)", priority: "Medium", level: "Intermediate" },
+                { name: "Backstage", priority: "High", level: "Advanced" },
+                { name: "Crossplane", priority: "Medium", level: "Advanced" }
+            ],
+            "AI & MLOps": [
+                { name: "MLOps Concepts", priority: "Medium", level: "Beginner" },
+                { name: "Kubeflow", priority: "Medium", level: "Advanced" },
+                { name: "MLflow", priority: "Medium", level: "Intermediate" },
+                { name: "Model Serving", priority: "Medium", level: "Advanced" }
             ]
         };
 
         let currentCategory = "Foundations";
         let userProgress = JSON.parse(localStorage.getItem('devopsPlanProgress2')) || {};
+        let currentRole = localStorage.getItem('devopsPlanRole') || "All";
+
+        const fresherTools = [
+            "Linux Fundamentals", "Shell Scripting (Bash)", "Networking Fundamentals", "HTTP, HTTPS, DNS", 
+            "Git", "GitHub", "Python", "SQL",
+            "AWS IAM", "AWS EC2", "AWS S3", "AWS VPC", "Security Groups", "Internet Gateway", 
+            "AWS RDS", "CloudWatch", "AWS ELB", "AWS Auto Scaling",
+            "Docker", "Docker Compose", "Docker Hub", "Nginx",
+            "CI/CD Concepts", "GitHub Actions", "Jenkins",
+            "Terraform",
+            "Kubernetes Architecture", "Pods", "Deployments", "Services",
+            "Prometheus", "Grafana",
+            "SonarQube", "Trivy",
+            "Postman",
+            "SLI", "SLO", "SLA", "High Availability"
+        ];
 
         function init() {
+            document.getElementById('role-filter').value = currentRole;
             renderNav();
             renderTable();
             updateOverallProgress();
         }
 
+        function updateRoleFilter(role) {
+            currentRole = role;
+            localStorage.setItem('devopsPlanRole', role);
+            renderNav();
+            renderTable();
+            updateOverallProgress();
+        }
+
+        function getFilteredTools(category) {
+            if (currentRole === 'Fresher') {
+                return planData[category].filter(t => fresherTools.includes(t.name));
+            }
+            return planData[category];
+        }
+
         function renderNav() {
             const navContainer = document.getElementById('nav-container');
             navContainer.innerHTML = '';
+            
+            let firstValidCategory = null;
 
             Object.keys(planData).forEach(category => {
+                const tools = getFilteredTools(category);
+                if (tools.length === 0) return; // Hide empty categories
+
+                if (!firstValidCategory) firstValidCategory = category;
+
                 const item = document.createElement('div');
                 item.className = `nav-item ${category === currentCategory ? 'active' : ''}`;
                 item.onclick = () => {
@@ -489,12 +559,17 @@
 
                 const badge = document.createElement('span');
                 badge.className = 'nav-badge';
-                badge.textContent = planData[category].length;
+                badge.textContent = tools.length;
 
                 item.appendChild(title);
                 item.appendChild(badge);
                 navContainer.appendChild(item);
             });
+
+            if (getFilteredTools(currentCategory).length === 0 && firstValidCategory) {
+                currentCategory = firstValidCategory;
+                setTimeout(() => { renderNav(); renderTable(); }, 0);
+            }
         }
 
         function renderTable() {
@@ -502,7 +577,7 @@
             const tbody = document.getElementById('table-body');
             tbody.innerHTML = '';
 
-            const tools = planData[currentCategory];
+            const tools = getFilteredTools(currentCategory);
 
             tools.forEach(tool => {
                 const tr = document.createElement('tr');
@@ -555,7 +630,8 @@
             let total = 0;
             let completed = 0;
 
-            Object.values(planData).forEach(tools => {
+            Object.keys(planData).forEach(category => {
+                const tools = getFilteredTools(category);
                 tools.forEach(tool => {
                     total++;
                     if(userProgress[tool.name] && userProgress[tool.name].status === 'completed') {
