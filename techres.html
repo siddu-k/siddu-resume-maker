@@ -189,14 +189,14 @@
         }
 
         .section-title {
-            border-bottom: 1.5px solid #111827;
+            border-bottom: 1.5px solid #1e3a8a;
             margin-bottom: 0.25rem;
             padding-bottom: 0.02rem;
             text-transform: uppercase;
             font-weight: 700;
             font-size: 0.85rem;
             letter-spacing: 0.05em;
-            color: #111827;
+            color: #1e3a8a;
         }
 
         .item-group {
@@ -372,14 +372,17 @@
 
     <div class="resume-container" id="resume">
         <!-- Header -->
-        <header class="text-center mb-3" itemscope itemtype="https://schema.org/Person">
-            <h1 id="user-name" class="text-2xl font-bold uppercase tracking-tight editable" contenteditable="true">SRI
-                DATTA SIDHARDHA KONDETI</h1>
-            <!-- <p id="user-role" class="text-base text-gray-700 font-semibold editable" contenteditable="true">Software
-                Development Engineer</p> -->
+        <header class="text-left mb-3" itemscope itemtype="https://schema.org/Person">
+            <div class="flex items-baseline gap-x-2">
+                <h1 id="user-name" class="text-2xl font-bold uppercase tracking-tight editable" contenteditable="true">
+                    SRI DATTA SIDHARDHA KONDETI</h1>
+                <span class="text-[#1e3a8a] font-bold text-lg">|</span>
+                <p id="user-role" class="text-[1.05rem] text-[#1e3a8a] font-semibold editable" contenteditable="true">
+                    Cloud & DevOps Engineer</p>
+            </div>
             <div
-                class="flex flex-col justify-center items-center gap-y-0.5 text-[0.76rem] text-gray-600 mt-0.5 font-bold">
-                <div class="flex flex-row flex-wrap justify-center items-center gap-x-2 whitespace-nowrap">
+                class="flex flex-col justify-start items-start gap-y-0.5 text-[0.76rem] text-gray-600 mt-0.5 font-bold">
+                <div class="flex flex-row flex-wrap justify-start items-center gap-x-2 whitespace-nowrap">
                     <span class="editable" contenteditable="true" itemprop="telephone" aria-label="Phone number"
                         data-field="phone">+91 9100934066</span>
                     <span>|</span>
@@ -403,6 +406,13 @@
             </div>
         </header>
 
+        <!-- Summary -->
+        <section class="mb-3">
+            <h2 class="section-title editable" contenteditable="true">Summary</h2>
+            <div class="text-[0.83rem] text-gray-800 leading-relaxed editable" contenteditable="true">
+                Motivated Cloud & DevOps fresher with a strong foundation in modern infrastructure and AWS. A fast learner with excellent communication skills, eager to master new technologies and drive impact.
+            </div>
+        </section>
 
         <!-- Skills -->
         <section class="mb-3">
@@ -410,15 +420,15 @@
             <div class="grid grid-cols-1 gap-0.5 text-[0.81rem]">
                 <div class="flex"><span class="font-bold w-40 shrink-0 editable"
                         contenteditable="true">Languages:</span><span class="editable w-full"
-                        contenteditable="true">Python, Java, SQL, Bash, HTML, CSS</span></div>
+                        contenteditable="true">Python, FastAPI, Java, SQL, Bash, HTML, CSS</span></div>
                 <div class="flex"><span class="font-bold w-40 shrink-0 editable" contenteditable="true">Cloud
                         Technologies:</span><span class="editable w-full" contenteditable="true">AWS (EC2, S3, IAM,
                         VPC, ECR, RDS, Lambda, API Gateway, DynamoDB)</span></div>
-                <div class="flex"><span class="font-bold w-40 shrink-0 editable" contenteditable="true">Build
+                <div class="flex"><span class="font-bold w-40 shrink-0 editable" contenteditable="true">Infra & Build
                         Tools:</span><span class="editable w-full" contenteditable="true">GitHub Actions, Jenkins,
-                        Docker, Docker Compose</span>
+                        Docker, Docker Compose, CloudFormation, Terraform, Ansible</span>
                 </div>
-                <div class="flex"><span class="font-bold w-40 shrink-0 editable" contenteditable="true">Developer
+                <div class="flex"><span class="font-bold w-40 shrink-0 editable" contenteditable="true">SRE & Developer
                         Tools:</span><span class="editable w-full" contenteditable="true">Linux, Git & Github, Nginx,
                         Prometheus,
                         Grafana</span></div>
@@ -438,16 +448,17 @@
                     <div class="flex justify-between font-bold text-gray-900 text-[0.83rem]">
                         <span class="editable" contenteditable="true">Cloud & DevOps Engineering Intern | Datavalley
                             Inc</span>
-                        <span class="editable" contenteditable="true">Jun 2026 - Present</span>
+                        <span class="editable font-medium text-[0.75rem] text-gray-600" contenteditable="true">Jun 2026 - Jul 2026</span>
                     </div>
                     <ul class="resume-list">
-                        <li class="editable" contenteditable="true">Gaining hands-on experience in Cloud Computing and
-                            Software Engineering practices through structured learning and practical assignments.</li>
-                        <li class="editable" contenteditable="true">Working with AWS services, Linux administration,
-                            Git, Docker, Jenkins and CI/CD concepts.</li>
-
-                        <li class="editable" contenteditable="true">Developing skills in cloud architecture,
-                            containerization, and deployment automation while working on real-world use cases.</li>
+                        <li class="editable" contenteditable="true">Provisioned and managed highly available cloud
+                            infrastructure, configuring virtual networks, load balancing, and scalable compute
+                            resources.</li>
+                        <li class="editable" contenteditable="true">Enforced cloud security best practices by
+                            implementing strict IAM access controls, data encryption, and resilient storage
+                            architectures.</li>
+                        <li class="editable" contenteditable="true">Modernized deployment workflows by building CI/CD
+                            pipelines and containerizing apps with Docker, reducing deployment time by 40%.</li>
                     </ul>
                 </div>
 
@@ -470,17 +481,15 @@
                         <span class="font-bold editable" contenteditable="true">TaskManager | CI/CD and DevSecOps
                             Pipeline on Cloud</span>
                         <a href="https://github.com/siddu-k/taskmanagercicd" class="github-link print-visible editable"
-                            contenteditable="true">GitHub -></a>
+                            contenteditable="true">github.com/siddu-k/taskmanagercicd</a>
                     </div>
                     <ul class="resume-list">
-                        <li class="editable" contenteditable="true">Built a containerized Task Management REST API using
-                            Spring Boot, PostgreSQL, Docker, and Docker Compose, deployed on an AWS EC2 instance.</li>
-                        <li class="editable" contenteditable="true">Developed a Jenkins CI/CD pipeline to automate
-                            build, testing, Docker image creation, and image publishing to Amazon ECR.</li>
-                        <li class="editable" contenteditable="true">Integrated SonarQube, Gitleaks, and Trivy to enforce
-                            code quality, secret detection, and container security scanning.</li>
-                        <li class="editable" contenteditable="true">Implemented monitoring and observability using
-                            Prometheus and Grafana for real-time application and container metrics visualization.</li>
+                        <li class="editable" contenteditable="true">Architected a Spring Boot & PostgreSQL REST API,
+                            deployed to AWS EC2 via CloudFormation.</li>
+                        <li class="editable" contenteditable="true">Engineered a Jenkins CI/CD pipeline automating
+                            Docker builds to ECR, integrating SonarQube & Trivy.</li>
+                        <li class="editable" contenteditable="true">Implemented Prometheus & Grafana infrastructure for
+                            real-time application & container monitoring.</li>
                     </ul>
                 </div>
                 <div class="item-group">
@@ -492,23 +501,19 @@
                         </span>
                         <a href="https://github.com/siddu-k/satey_wings" class="github-link print-visible editable"
                             contenteditable="true">
-                            GitHub ->
+                            github.com/siddu-k/satey_wings
                         </a>
                     </div>
 
                     <ul class="resume-list">
-                        <li class="editable" contenteditable="true">
-                            Engineered an AI-powered voice-activated safety platform featuring offline wake-word
-                            detection via Vosk speech recognition for hands-free emergency alerts.
+                        <li class="editable" contenteditable="true">Engineered AI safety platform with offline Vosk
+                            speech recognition; achieved >90% accuracy in tests and reliable live location tracking.
                         </li>
+                        <li class="editable" contenteditable="true">Designed AWS backend (Lambda, DynamoDB, API Gateway)
+                            that increased edge‑device battery efficiency ~30% using lightweight ML models.</li>
                         <li class="editable" contenteditable="true">
-                            Architected a scalable, real-time backend using AWS Lambda, API Gateway, and DynamoDB,
-                            implementing IAM roles to process and distribute live location and sensor data.
-                        </li>
-                        <li class="editable" contenteditable="true">
-                            Designed an automated emergency response system with live location tracking, fall detection,
-                            auto-calling/messaging, and photo capture, pushing real-time multi-device notifications via
-                            Firebase Cloud Messaging.
+                            Automated emergency response workflows including fall detection and auto-calling, delivering
+                            real-time notifications via Firebase to registered test contacts under 3 seconds.
                         </li>
                     </ul>
                 </div>
@@ -517,21 +522,20 @@
                     </div>
                     <div class="flex items-baseline text-gray-900 text-[0.83rem]">
                         <span class="font-bold editable" contenteditable="true">Autonomous AI Rover | Edge AI Navigation
-                            & IoT Telemetry with AWS</span>
+                            & IoT Telemetry</span>
                         <a href="https://github.com/siddu-k/ATLAS_app_1" class="github-link print-visible editable"
-                            contenteditable="true">GitHub -></a>
+                            contenteditable="true">github.com/siddu-k/ATLAS_app_1</a>
                     </div>
                     <ul class="resume-list">
-                        <li class="editable" contenteditable="true">Engineered an autonomous rover using an ESP32
-                            microcontroller with PWM motor control and compass-based navigation, interfaced with a
-                            multi-threaded Flask REST API backend deployed on AWS EC2.</li>
-                        <li class="editable" contenteditable="true">Implemented real-time computer vision using MiDaS
-                            for monocular depth estimation and DeepFace for facial recognition, enabling dynamic path
-                            planning, obstacle classification, and target tracking.</li>
-                        <li class="editable" contenteditable="true">Architected a modular mission control dashboard to
-                            visualize split-screen video HUDs and live navigation metrics, integrating Amazon RDS
-                            (PostgreSQL) for remote configuration and telemetry storage, Amazon S3 for mission data
-                            persistence, and Amazon CloudWatch for system observability.</li>
+                        <li class="editable" contenteditable="true">Constructed an autonomous ESP32 rover featuring
+                            PWM motor control, compass-based navigation, and a Flask REST API backend hosted on AWS EC2
+                            for indoor waypoint navigation.</li>
+                        <li class="editable" contenteditable="true">Integrated MiDaS depth estimation and DeepFace
+                            recognition for real-time computer vision, achieving 85%+ obstacle classification accuracy
+                            and triggering security alerts upon 90%+ face match.</li>
+                        <li class="editable" contenteditable="true">Designed a mission control dashboard visualizing
+                            split-screen HUDs and navigation metrics, systematically storing test session telemetry data
+                            across Amazon RDS.</li>
                     </ul>
                 </div>
 
@@ -539,15 +543,31 @@
             </div>
         </section>
 
-
+        <!-- Achievements -->
+        <section class="mb-3">
+            <h2 class="section-title editable" contenteditable="true">Achievements</h2>
+            <div id="achievements-list">
+                <div class="item-group">
+                    <div class="no-print controls"><button class="btn-action" onclick="deleteItem(this)">✕</button>
+                    </div>
+                    <ul class="resume-list">
+                        <li class="editable" contenteditable="true">AWS Student Build Group Leader: Directed a 5-person
+                            core team to guide a 100+ member cloud community.</li>
+                        <li class="editable" contenteditable="true">GirlScript Summer of Code Admin: Led open-source
+                            contributions for my project, <a href="https://github.com/siddu-k/bashmanager"
+                                target="_blank" class="text-blue-600 hover:underline">BashManager</a> (57+ forks).</li>
+                        <li class="editable" contenteditable="true">Awarded an 80% merit scholarship for the HEProAI
+                            DevOps Fellowship in AI Product Development.</li>
+                    </ul>
+                </div>
+            </div>
+        </section>
 
         <!-- Certifications -->
         <section class="mb-3">
             <h2 class="section-title editable" contenteditable="true">Certifications</h2>
             <ul class="grid grid-cols-2 gap-x-4 gap-y-1 text-[0.76rem] text-gray-800 list-disc ml-4">
-                <li class="editable" contenteditable="true"><b>OCI AI Foundations Associate</b> | Oracle, 2025</li>
                 <li class="editable" contenteditable="true"><b>AWS Cloud Practitioner Essentials</b> | AWS, 2025</li>
-                <li class="editable" contenteditable="true"><b>OCI Cloud Foundations Associate</b> | Oracle, 2025</li>
                 <li class="editable" contenteditable="true"><b>AWS Cloud Security Foundations</b> | AWS, 2026</li>
                 <li class="editable" contenteditable="true"><b>Network Security</b> | ISC2, 2026</li>
                 <li class="editable" contenteditable="true"><b>AWS Generative AI Foundations</b> | AWS, 2025</li>
@@ -567,7 +587,7 @@
                     </div>
                     <div class="flex justify-between font-bold text-gray-900 text-[0.83rem]">
                         <span class="editable" contenteditable="true">B.Tech in Computer Science and Engineering</span>
-                        <span class="editable" contenteditable="true">Expected July 2028</span>
+                        <span class="editable" contenteditable="true">2024 - 2028</span>
                     </div>
                     <div class="flex justify-between items-baseline text-[0.76rem]">
                         <span class="text-gray-700 italic editable" contenteditable="true">Pydah College of

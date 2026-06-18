@@ -1,0 +1,734 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LinkedIn Banner Maker</title>
+    <!-- Include html2canvas for high quality export -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --bg-dark: #09090b;
+            --primary: #3b82f6;
+            --primary-glow: rgba(59, 130, 246, 0.5);
+            --secondary: #8b5cf6;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body {
+            font-family: 'Outfit', sans-serif;
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(at 0% 0%, rgba(59, 130, 246, 0.15) 0px, transparent 50%),
+                radial-gradient(at 100% 100%, rgba(139, 92, 246, 0.15) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--text-main);
+            margin: 0;
+            padding: 40px 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+            animation: fadeInDown 0.8s ease-out;
+        }
+
+        @keyframes fadeInDown {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h1 {
+            margin: 0;
+            font-size: 3rem;
+            font-weight: 800;
+            background: linear-gradient(135deg, #60a5fa, #c084fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            letter-spacing: -1px;
+        }
+
+        p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            margin-top: 10px;
+        }
+
+        .controls {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            padding: 15px 30px;
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.3);
+            flex-wrap: wrap;
+            justify-content: center;
+            animation: fadeInUp 0.8s ease-out 0.2s both;
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        button {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            font-family: 'Outfit', sans-serif;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px var(--primary-glow);
+        }
+
+        button:hover {
+            transform: translateY(-2px) scale(1.02);
+            box-shadow: 0 8px 25px var(--primary-glow);
+        }
+
+        button:active {
+            transform: translateY(1px);
+        }
+
+        .btn-secondary {
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: none;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .btn-secondary:hover {
+            background: rgba(255, 255, 255, 0.15);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #f87171;
+            box-shadow: none;
+            border: 1px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: rgba(239, 68, 68, 0.2);
+            box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+        }
+
+        .color-picker-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(0,0,0,0.2);
+            padding: 8px 20px;
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        .color-picker-wrapper label {
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: #cbd5e1;
+        }
+
+        input[type="color"] {
+            -webkit-appearance: none;
+            border: none;
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            cursor: pointer;
+            padding: 0;
+            background: transparent;
+            transition: transform 0.2s;
+        }
+
+        input[type="color"]:hover {
+            transform: scale(1.1);
+        }
+
+        input[type="color"]::-webkit-color-swatch-wrapper {
+            padding: 0;
+        }
+        input[type="color"]::-webkit-color-swatch {
+            border: none;
+            border-radius: 50%;
+            box-shadow: 0 0 0 2px rgba(255,255,255,0.2);
+        }
+
+        .workspace {
+            width: 100%;
+            max-width: 1624px;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            perspective: 1000px;
+            animation: zoomIn 1s cubic-bezier(0.2, 0.8, 0.2, 1) 0.4s both;
+            overflow-x: auto;
+        }
+
+        @keyframes zoomIn {
+            from { opacity: 0; transform: scale(0.95) rotateX(5deg); }
+            to { opacity: 1; transform: scale(1) rotateX(0deg); }
+        }
+
+        .banner-scaler {
+            transform-origin: top center;
+            width: 1584px;
+            height: 396px;
+            transition: transform 0.3s ease;
+        }
+
+        .banner {
+            width: 1584px;
+            height: 396px;
+            background: linear-gradient(135deg, #1e293b, #0f172a);
+            border-radius: 0;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 60px;
+            box-sizing: border-box;
+            gap: 25px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 0 1px rgba(255,255,255,0.1);
+            overflow: hidden;
+        }
+
+        .banner::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -10%;
+            width: 50%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(255,255,255,0.03) 0%, transparent 70%);
+            transform: rotate(30deg);
+            pointer-events: none;
+        }
+
+        .row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 25px;
+            flex: 1;
+            width: 100%;
+            min-height: 0;
+            z-index: 1;
+        }
+
+        .badge-slot {
+            height: calc(var(--badge-size, 100%) * var(--local-scale, 1));
+            aspect-ratio: 1 / 1;
+            background: rgba(255, 255, 255, 0.03);
+            backdrop-filter: blur(8px);
+            border: 2px dashed rgba(255, 255, 255, 0.2);
+            border-radius: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            position: relative;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-sizing: border-box;
+            max-width: 100%;
+            flex: 0 1 auto;
+        }
+        
+        .scale-slider-container {
+            position: absolute;
+            bottom: -20px;
+            left: 50%;
+            transform: translateX(-50%);
+            opacity: 0;
+            transition: all 0.3s ease;
+            z-index: 20;
+            background: rgba(0, 0, 0, 0.6);
+            padding: 4px 10px;
+            border-radius: 12px;
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+        }
+
+        .badge-slot:hover .scale-slider-container {
+            opacity: 1;
+            bottom: -35px;
+        }
+
+        .scale-slider-container input[type="range"] {
+            width: 70px;
+            height: 4px;
+            accent-color: var(--primary);
+            cursor: pointer;
+            margin: 0;
+        }
+
+        .badge-slot:hover {
+            background: rgba(255, 255, 255, 0.08);
+            border-color: rgba(255, 255, 255, 0.6);
+            transform: translateY(-5px) scale(1.05);
+            box-shadow: 0 15px 30px -10px rgba(0,0,0,0.5);
+        }
+
+        .badge-slot.dragging {
+            opacity: 0.5;
+            transform: scale(0.95);
+            box-shadow: 0 0 0 2px var(--primary);
+            z-index: 100;
+        }
+
+        .badge-slot.drag-over {
+            border-color: var(--primary);
+            background: rgba(59, 130, 246, 0.2);
+            transform: scale(1.05);
+        }
+
+        .badge-slot.has-image {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            backdrop-filter: none;
+        }
+        
+        .badge-slot.has-image:hover {
+            border: none;
+            background: transparent;
+            box-shadow: none;
+            transform: none;
+        }
+
+        .badge-slot img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            border-radius: 0;
+            pointer-events: none;
+            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.7));
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+        }
+
+        .badge-slot:hover img {
+            transform: scale(1.1) translateY(-5px);
+            filter: drop-shadow(0 30px 40px rgba(0,0,0,0.95));
+        }
+
+        .add-icon {
+            font-size: 2.5rem;
+            font-weight: 300;
+            color: rgba(255, 255, 255, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        .badge-slot:hover .add-icon {
+            color: rgba(255, 255, 255, 0.9);
+            transform: scale(1.2) rotate(90deg);
+        }
+
+        .remove-btn {
+            position: absolute;
+            top: -12px;
+            right: -12px;
+            background: #ef4444;
+            color: white;
+            border: 2px solid var(--bg-dark);
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            font-size: 18px;
+            line-height: 1;
+            cursor: pointer;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0.8);
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 10;
+            box-shadow: 0 4px 10px rgba(239, 68, 68, 0.4);
+        }
+        
+        .badge-slot:hover .remove-btn {
+            opacity: 1;
+            transform: scale(1);
+        }
+
+        .remove-btn:hover {
+            background: #dc2626;
+            transform: scale(1.15) !important;
+        }
+
+        #fileInput {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>LinkedIn Banner Maker</h1>
+        <p>Design a stunning showcase of your badges and achievements</p>
+    </header>
+
+    <div class="controls">
+        <button id="addBadgeBtn">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            Add Badge Slot
+        </button>
+        <div class="color-picker-wrapper">
+            <label>Size:</label>
+            <input type="range" id="sizeSlider" min="40" max="150" value="100" style="width: 80px; accent-color: var(--primary); cursor: pointer;">
+        </div>
+        <div class="color-picker-wrapper">
+            <label>Background:</label>
+            <input type="color" id="bgColor1" value="#1e293b">
+            <input type="color" id="bgColor2" value="#0f172a">
+            <button id="uploadBgBtn" class="btn-secondary" style="padding: 4px 10px; margin-left: 5px; font-size: 0.8rem;" title="Upload custom background image">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
+            </button>
+            <button id="clearBgBtn" class="btn-secondary btn-danger" style="padding: 4px 10px; font-size: 0.8rem; display: none;" title="Remove custom background">
+                <svg width="16" height="16" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+        </div>
+        <button id="clearBtn" class="btn-secondary btn-danger">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+            Clear All
+        </button>
+        <button id="downloadBtn" class="btn-secondary">
+            <svg width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"></path></svg>
+            Download HD Banner
+        </button>
+    </div>
+
+    <div class="workspace">
+        <div class="banner-scaler" id="bannerScaler">
+            <div class="banner" id="banner">
+                <div class="row" id="row1"></div>
+                <div class="row" id="row2"></div>
+            </div>
+        </div>
+    </div>
+
+    <input type="file" id="fileInput" accept="image/png, image/jpeg, image/webp">
+    <input type="file" id="bgFileInput" accept="image/png, image/jpeg, image/webp" style="display: none;">
+
+    <script>
+        // State
+        let currentSlotId = null;
+        let draggedSlot = null;
+
+        // Elements
+        const addBadgeBtn = document.getElementById('addBadgeBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const downloadBtn = document.getElementById('downloadBtn');
+        const row1 = document.getElementById('row1');
+        const row2 = document.getElementById('row2');
+        const fileInput = document.getElementById('fileInput');
+        const banner = document.getElementById('banner');
+        const bgColor1 = document.getElementById('bgColor1');
+        const bgColor2 = document.getElementById('bgColor2');
+        const bannerScaler = document.getElementById('bannerScaler');
+        const sizeSlider = document.getElementById('sizeSlider');
+        const uploadBgBtn = document.getElementById('uploadBgBtn');
+        const clearBgBtn = document.getElementById('clearBgBtn');
+        const bgFileInput = document.getElementById('bgFileInput');
+
+        // Badge Size logic
+        sizeSlider.addEventListener('input', (e) => {
+            banner.style.setProperty('--badge-size', `${e.target.value}%`);
+        });
+
+        // Scale banner to fit the screen
+        function scaleBanner() {
+            const workspaceWidth = document.querySelector('.workspace').clientWidth;
+            // 1584 is banner width, leave 40px for padding
+            const scale = Math.min(1, (workspaceWidth - 40) / 1584);
+            bannerScaler.style.transform = `scale(${scale})`;
+            bannerScaler.style.height = `${396 * scale}px`;
+        }
+
+        window.addEventListener('resize', scaleBanner);
+        // Initial scale delay to ensure proper DOM layout computation
+        setTimeout(scaleBanner, 100);
+
+        let customBgUrl = null;
+
+        // Background gradient or image
+        function updateBackground() {
+            if (customBgUrl) {
+                banner.style.background = `url(${customBgUrl}) center/cover no-repeat`;
+            } else {
+                banner.style.background = `linear-gradient(135deg, ${bgColor1.value}, ${bgColor2.value})`;
+            }
+        }
+        bgColor1.addEventListener('input', updateBackground);
+        bgColor2.addEventListener('input', updateBackground);
+
+        uploadBgBtn.addEventListener('click', () => bgFileInput.click());
+
+        bgFileInput.addEventListener('change', (e) => {
+            if (!e.target.files || !e.target.files[0]) return;
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                customBgUrl = event.target.result;
+                clearBgBtn.style.display = 'flex';
+                updateBackground();
+            };
+            reader.readAsDataURL(file);
+            bgFileInput.value = ''; // reset
+        });
+
+        clearBgBtn.addEventListener('click', () => {
+            customBgUrl = null;
+            clearBgBtn.style.display = 'none';
+            updateBackground();
+        });
+
+        function createSlotElement(slotId) {
+            const slot = document.createElement('div');
+            slot.className = 'badge-slot';
+            slot.id = slotId;
+            
+            const icon = document.createElement('div');
+            icon.className = 'add-icon';
+            icon.innerHTML = '+';
+            
+            const removeBtn = document.createElement('button');
+            removeBtn.className = 'remove-btn';
+            removeBtn.innerHTML = '&times;';
+            removeBtn.title = "Remove Slot";
+            removeBtn.onclick = (e) => {
+                e.stopPropagation();
+                slot.remove();
+                rebalanceRows();
+            };
+
+            const scaleContainer = document.createElement('div');
+            scaleContainer.className = 'scale-slider-container';
+            const scaleSlider = document.createElement('input');
+            scaleSlider.type = 'range';
+            scaleSlider.min = '0.3';
+            scaleSlider.max = '2.5';
+            scaleSlider.step = '0.05';
+            scaleSlider.value = '1';
+            scaleSlider.title = 'Adjust individual size';
+            
+            scaleSlider.addEventListener('input', (e) => {
+                e.stopPropagation();
+                slot.style.setProperty('--local-scale', e.target.value);
+            });
+            scaleSlider.addEventListener('click', e => e.stopPropagation());
+            scaleSlider.addEventListener('mousedown', e => e.stopPropagation());
+
+            scaleContainer.appendChild(scaleSlider);
+
+            slot.appendChild(icon);
+            slot.appendChild(removeBtn);
+            slot.appendChild(scaleContainer);
+
+            slot.addEventListener('click', () => {
+                currentSlotId = slotId;
+                fileInput.click();
+            });
+
+            // Drag and drop to swap
+            slot.draggable = true;
+
+            slot.addEventListener('dragstart', function(e) {
+                // Ignore drag if dragging slider or button
+                if (e.target.tagName.toLowerCase() === 'input' || e.target.tagName.toLowerCase() === 'button') {
+                    e.preventDefault();
+                    return;
+                }
+                draggedSlot = this;
+                e.dataTransfer.effectAllowed = 'move';
+                e.dataTransfer.setData('text/plain', this.id);
+                setTimeout(() => this.classList.add('dragging'), 0);
+            });
+
+            slot.addEventListener('dragover', function(e) {
+                e.preventDefault();
+                return false;
+            });
+
+            slot.addEventListener('dragenter', function(e) {
+                e.preventDefault();
+                if (this !== draggedSlot && draggedSlot !== null) {
+                    this.classList.add('drag-over');
+                }
+            });
+
+            slot.addEventListener('dragleave', function() {
+                this.classList.remove('drag-over');
+            });
+
+            slot.addEventListener('drop', function(e) {
+                e.stopPropagation();
+                this.classList.remove('drag-over');
+                
+                if (draggedSlot && draggedSlot !== this) {
+                    const allSlots = [...row1.children, ...row2.children];
+                    const draggedIndex = allSlots.indexOf(draggedSlot);
+                    const targetIndex = allSlots.indexOf(this);
+                    
+                    if (draggedIndex !== -1 && targetIndex !== -1) {
+                        allSlots[draggedIndex] = this;
+                        allSlots[targetIndex] = draggedSlot;
+                        
+                        row1.innerHTML = '';
+                        row2.innerHTML = '';
+                        allSlots.forEach((s, index) => {
+                            if (index % 2 === 0) {
+                                row1.appendChild(s);
+                            } else {
+                                row2.appendChild(s);
+                            }
+                        });
+                    }
+                }
+                return false;
+            });
+
+            slot.addEventListener('dragend', function() {
+                this.classList.remove('dragging');
+                draggedSlot = null;
+                document.querySelectorAll('.badge-slot').forEach(s => s.classList.remove('drag-over'));
+            });
+
+            return slot;
+        }
+
+        function addBadgeSlot() {
+            const slotId = 'slot-' + Date.now() + Math.floor(Math.random() * 1000);
+            const slot = createSlotElement(slotId);
+
+            if (row1.children.length <= row2.children.length) {
+                row1.appendChild(slot);
+            } else {
+                row2.appendChild(slot);
+            }
+        }
+
+        function rebalanceRows() {
+            const allSlots = [...row1.children, ...row2.children];
+            row1.innerHTML = '';
+            row2.innerHTML = '';
+            
+            allSlots.forEach((slot, index) => {
+                if (index % 2 === 0) {
+                    row1.appendChild(slot);
+                } else {
+                    row2.appendChild(slot);
+                }
+            });
+        }
+
+        // Image Selection
+        fileInput.addEventListener('change', (e) => {
+            if (!currentSlotId || !e.target.files || !e.target.files[0]) return;
+
+            const file = e.target.files[0];
+            const reader = new FileReader();
+            
+            reader.onload = (event) => {
+                const slot = document.getElementById(currentSlotId);
+                if (slot) {
+                    slot.classList.add('has-image');
+                    
+                    const existingImg = slot.querySelector('img');
+                    if (existingImg) existingImg.remove();
+
+                    const icon = slot.querySelector('.add-icon');
+                    if (icon) icon.style.display = 'none';
+
+                    const img = document.createElement('img');
+                    img.src = event.target.result;
+                    slot.appendChild(img);
+                }
+            };
+            
+            reader.readAsDataURL(file);
+            fileInput.value = '';
+        });
+
+        // Clear All logic
+        clearBtn.addEventListener('click', () => {
+            if (confirm('Are you sure you want to clear all badges?')) {
+                row1.innerHTML = '';
+                row2.innerHTML = '';
+                // Add back default slots
+                for(let i=0; i<6; i++) addBadgeSlot();
+            }
+        });
+
+        addBadgeBtn.addEventListener('click', addBadgeSlot);
+
+        // Download functionality
+        downloadBtn.addEventListener('click', async () => {
+            const originalBtnContent = downloadBtn.innerHTML;
+            downloadBtn.innerHTML = 'Generating...';
+            downloadBtn.disabled = true;
+
+            const currentTransform = bannerScaler.style.transform;
+            bannerScaler.style.transform = 'scale(1)';
+            
+            const removeBtns = document.querySelectorAll('.remove-btn');
+            const scaleSliders = document.querySelectorAll('.scale-slider-container');
+            removeBtns.forEach(btn => btn.style.display = 'none');
+            scaleSliders.forEach(slider => slider.style.display = 'none');
+
+            // Wait a tiny bit for the transform to apply
+            await new Promise(r => setTimeout(r, 100));
+
+            try {
+                const canvas = await html2canvas(banner, {
+                    width: 1584,
+                    height: 396,
+                    scale: 2, // 2x scale for HD quality
+                    backgroundColor: null,
+                    logging: false,
+                    useCORS: true,
+                    allowTaint: true
+                });
+
+                const link = document.createElement('a');
+                link.download = 'linkedin-banner-badges.png';
+                link.href = canvas.toDataURL('image/png', 1.0);
+                link.click();
+            } catch (error) {
+                console.error('Error generating banner:', error);
+                alert('Failed to generate banner image. Please try again.');
+            } finally {
+                bannerScaler.style.transform = currentTransform;
+                removeBtns.forEach(btn => btn.style.display = '');
+                scaleSliders.forEach(slider => slider.style.display = '');
+                downloadBtn.innerHTML = originalBtnContent;
+                downloadBtn.disabled = false;
+            }
+        });
+
+        // Initialize empty grid
+        for(let i=0; i<6; i++) {
+            addBadgeSlot();
+        }
+    </script>
+</body>
+</html>
