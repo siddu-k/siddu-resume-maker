@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cover Letter Builder - Cloud & DevOps Engineer</title>
+    <meta name="description" content="Cover Letter Builder for Cloud & DevOps Engineer roles.">
+    <meta name="author" content="Sri Datta Sidhardha Kondeti">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/html-docx-js/dist/html-docx.js"></script>
+    <style>
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            background-color: #f3f4f6;
+        }
+
+        /* Floating Toolbar Styling */
+        #floating-toolbar {
+            position: absolute;
+            display: none;
+            background: #1f2937;
+            color: white;
+            padding: 6px;
+            border-radius: 8px;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.4);
+            z-index: 1000;
+            flex-direction: row;
+            align-items: center;
+            gap: 6px;
+            pointer-events: auto;
+            animation: fadeIn 0.1s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(5px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .toolbar-btn {
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background 0.2s;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .toolbar-btn:hover {
+            background: #4b5563;
+        }
+
+        .toolbar-select {
+            background: #374151;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            font-size: 11px;
+            padding: 4px;
+            outline: none;
+            cursor: pointer;
+        }
+
+        .link-input {
+            background: #111827;
+            color: #60a5fa;
+            border: 1px solid #374151;
+            border-radius: 4px;
+            padding: 2px 8px;
+            font-size: 11px;
+            width: 160px;
+            outline: none;
+        }
+
+        @media print {
+            * {
+                box-shadow: none !important;
+                filter: none !important;
+            }
+
+            body {
+                background-color: white;
+                font-family: Arial, Helvetica, sans-serif !important;
+            }
+
+            .no-print,
+            #floating-toolbar {
+                display: none !important;
+            }
+
+            .print-visible {
+                display: inline-block !important;
+                text-decoration: none !important;
+                color: #2563eb !important;
+            }
+
+            .resume-container {
+                box-shadow: none !important;
+                transform: none !important;
+                margin: 0 !important;
+                width: 100% !important;
+                max-width: 100% !important;
+                padding: 15mm 20mm !important;
+            }
+
+            @page {
+                size: A4;
+                margin: 0;
+            }
+
+            a {
+                color: #000 !important;
+                text-decoration: none !important;
+            }
+
+            .editable:empty::before {
+                content: "" !important;
+            }
+        }
+
+        .resume-container {
+            width: 210mm;
+            min-height: 297mm;
+            padding: 15mm 20mm;
+            margin: 0.5rem auto;
+            background: white;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+            color: #111827;
+            position: relative;
+            line-height: 1.6;
+        }
+
+        .editable {
+            border: 1px solid transparent;
+            transition: all 0.2s;
+            outline: none;
+        }
+
+        .editable:hover {
+            border-color: #e5e7eb;
+            background-color: #f9fafb;
+        }
+
+        .editable:focus {
+            border-color: #3b82f6;
+            background-color: rgba(255, 255, 255, 0.8);
+            outline: 2px solid #3b82f6;
+            z-index: 20;
+        }
+
+        .section-title {
+            border-bottom: 1.5px solid #1e3a8a;
+            margin-bottom: 0.25rem;
+            padding-bottom: 0.02rem;
+            text-transform: uppercase;
+            font-weight: 700;
+            font-size: 0.85rem;
+            letter-spacing: 0.05em;
+            color: #1e3a8a;
+        }
+
+        header h1 {
+            line-height: 1.0;
+            margin-bottom: 0.05rem;
+        }
+
+        .donate-float {
+            position: fixed;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: #f59e0b;
+            color: #111827;
+            font-weight: 700;
+            font-size: 0.85rem;
+            padding: 10px 14px;
+            border-radius: 9999px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            text-decoration: none;
+            z-index: 1100;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background-color 0.2s ease;
+        }
+
+        .donate-float:hover {
+            background: #fbbf24;
+            transform: translateY(-50%) scale(1.03);
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+        }
+
+        p {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+
+<body class="py-1">
+
+    <!-- Floating Format Bar -->
+    <div id="floating-toolbar" class="no-print">
+        <button class="toolbar-btn" onclick="formatDoc('bold')" title="Bold">B</button>
+        <button class="toolbar-btn" onclick="formatDoc('italic')" title="Italic" style="font-style: italic;">I</button>
+        <button class="toolbar-btn" onclick="formatDoc('underline')" title="Underline" style="text-decoration: underline;">U</button>
+        <div class="h-6 w-px bg-gray-600 mx-1"></div>
+        <select class="toolbar-select" onchange="formatDoc('fontSize', this.value)" title="Font Size">
+            <option value="1">S</option>
+            <option value="3" selected>M</option>
+            <option value="5">L</option>
+            <option value="6">XL</option>
+        </select>
+        <div class="h-6 w-px bg-gray-600 mx-1"></div>
+        <button class="toolbar-btn" onclick="toggleUrlEditor()" title="Edit Link">🔗</button>
+        <div id="url-editor-container" class="hidden flex items-center gap-2 border-l border-gray-600 pl-2 ml-1">
+            <span class="text-[10px] uppercase font-bold text-gray-400">URL:</span>
+            <input type="text" id="link-url-input" class="link-input" placeholder="https://..." oninput="updateCurrentLink(this.value)">
+        </div>
+    </div>
+
+    <!-- Top Bar Controls -->
+    <div class="max-w-[210mm] mx-auto mb-2 flex justify-between items-center no-print px-4">
+        <div>
+            <h1 class="text-lg font-bold text-gray-800">Cover Letter Builder</h1>
+        </div>
+        <div class="flex gap-2">
+            <button onclick="downloadDocx()" class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-1.5 px-4 rounded shadow transition-all flex items-center gap-2 text-xs">
+                Download .DOCX
+            </button>
+            <button onclick="triggerPrint()" class="bg-black hover:bg-gray-800 text-white font-semibold py-1.5 px-4 rounded shadow transition-all flex items-center gap-2 text-xs">
+                Print to PDF
+            </button>
+        </div>
+    </div>
+
+    <div class="resume-container" id="cover-letter">
+        <!-- Header: Applicant Info -->
+        <header class="text-left border-b-2 border-gray-300 pb-4 mb-6">
+            <h1 id="user-name" class="text-3xl font-bold uppercase tracking-tight editable text-gray-900" contenteditable="true">SRI DATTA SIDHARDHA KONDETI</h1>
+            <p id="user-role" class="text-lg text-[#1e3a8a] font-semibold editable mt-1" contenteditable="true">Cloud & DevOps Engineer</p>
+            
+            <div class="flex flex-col gap-1 text-[0.85rem] text-gray-600 mt-3 font-medium">
+                <div class="flex flex-wrap gap-x-3 gap-y-1">
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z"></path></svg>
+                        <span class="editable" contenteditable="true">+91 9100934066</span>
+                    </span>
+                    <span class="text-gray-400">|</span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path d="M2.003 5.884L10 9.882l7.997-3.998A2 2 0 0016 4H4a2 2 0 00-1.997 1.884z"></path><path d="M18 8.118l-8 4-8-4V14a2 2 0 002 2h12a2 2 0 002-2V8.118z"></path></svg>
+                        <a href="mailto:sridatta.k99@gmail.com" class="editable print-visible" contenteditable="true">sridatta.k99@gmail.com</a>
+                    </span>
+                    <span class="text-gray-400">|</span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/></svg>
+                        <a href="https://github.com/siddu-k" class="editable print-visible" contenteditable="true">github.com/siddu-k</a>
+                    </span>
+                    <span class="text-gray-400">|</span>
+                    <span class="flex items-center gap-1">
+                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24"><path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/></svg>
+                        <a href="https://www.linkedin.com/in/ksridatta/" class="editable print-visible" contenteditable="true">linkedin.com/in/ksridatta</a>
+                    </span>
+                </div>
+                <div class="flex items-center gap-1">
+                    <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M5.05 4.05a7 7 0 119.9 9.9L10 18.9l-4.95-4.95a7 7 0 010-9.9zM10 11a2 2 0 100-4 2 2 0 000 4z" clip-rule="evenodd"></path></svg>
+                    <span class="editable" contenteditable="true">Andhra Pradesh, Kakinada</span>
+                </div>
+            </div>
+        </header>
+
+        <!-- Date -->
+        <div class="mb-6 text-[0.95rem] text-gray-800 font-medium">
+            <span class="editable" contenteditable="true" id="current-date">Month DD, YYYY</span>
+        </div>
+
+        <!-- Recipient Info -->
+        <div class="mb-6 text-[0.95rem] text-gray-800 leading-relaxed">
+            <div class="editable font-bold" contenteditable="true">[Hiring Manager Name]</div>
+            <div class="editable" contenteditable="true">[Company Name]</div>
+            <div class="editable" contenteditable="true">[Company Address]</div>
+            <div class="editable" contenteditable="true">[City, State, Zip]</div>
+        </div>
+
+        <!-- Salutation -->
+        <div class="mb-4 text-[0.95rem] text-gray-800 font-medium">
+            <span class="editable" contenteditable="true">Dear [Hiring Manager Name],</span>
+        </div>
+
+        <!-- Body Paragraphs -->
+        <div class="text-[0.95rem] text-gray-800 leading-relaxed text-justify space-y-4">
+            <p class="editable" contenteditable="true">
+                I am writing to express my strong interest in the Cloud & DevOps Engineer position at [Company Name]. As a motivated Cloud & DevOps engineer with hands-on experience in AWS, infrastructure automation, and modern deployment pipelines, I am eager to bring my passion for building resilient and scalable cloud architectures to your engineering team.
+            </p>
+            <p class="editable" contenteditable="true">
+                During my recent tenure as a Cloud & DevOps Engineering Intern at Datavalley Inc, I successfully provisioned highly available cloud infrastructure by configuring VPCs, load balancers, and auto-scaling compute resources. I played a key role in hardening cloud security through strict IAM policies and encrypted architectures, while also constructing Docker-based CI/CD pipelines that reduced our deployment times by 40%. My technical proficiency extends across a robust stack including Python, AWS services, Docker, Terraform, and GitHub Actions.
+            </p>
+            <p class="editable" contenteditable="true">
+                In addition to my professional experience, I have developed comprehensive projects that showcase my ability to design complex cloud-native applications. For example, I architected a Spring Boot REST API deployed to AWS EC2 via CloudFormation and engineered a complete Jenkins CI/CD pipeline integrated with SonarQube and Trivy for DevSecOps. As the AWS Student Build Group Leader for a 100+ member community, I have demonstrated strong leadership and a commitment to continuous learning in the cloud ecosystem.
+            </p>
+            <p class="editable" contenteditable="true">
+                I am confident that my strong foundation in cloud technologies, coupled with my enthusiasm to adapt quickly and drive impact, aligns well with the innovative work being done at [Company Name]. I have attached my resume for your review and look forward to the opportunity to discuss how my background, skills, and certifications can contribute to the success of your team.
+            </p>
+        </div>
+
+        <!-- Sign-off -->
+        <div class="mt-8 text-[0.95rem] text-gray-800">
+            <div class="mb-2 editable" contenteditable="true">Sincerely,</div>
+            <div class="font-bold text-lg editable" contenteditable="true">Sri Datta Sidhardha Kondeti</div>
+        </div>
+    </div>
+
+    <a href="https://rzp.io/rzp/cnk4ReBP" target="_blank" rel="noopener noreferrer" class="donate-float no-print">Buy me a coffee</a>
+
+    <script>
+        // Set current date
+        const dateEl = document.getElementById('current-date');
+        const options = { year: 'numeric', month: 'long', day: 'numeric' };
+        dateEl.innerText = new Date().toLocaleDateString('en-US', options);
+
+        const toolbar = document.getElementById('floating-toolbar');
+        const urlEditor = document.getElementById('url-editor-container');
+        const urlInput = document.getElementById('link-url-input');
+        let currentLinkElement = null;
+
+        function getFileName() {
+            const nameEl = document.getElementById('user-name');
+            const name = nameEl ? nameEl.innerText.trim().replace(/\s+/g, '_') : 'Cover_Letter';
+            return `${name}_Cover_Letter`;
+        }
+
+        function triggerPrint() {
+            const originalTitle = document.title;
+            document.title = getFileName();
+            window.print();
+            setTimeout(() => { document.title = originalTitle; }, 500);
+        }
+
+        function formatDoc(cmd, val = null) {
+            document.execCommand(cmd, false, val);
+        }
+
+        function updateCurrentLink(val) {
+            if (currentLinkElement) {
+                currentLinkElement.setAttribute('href', val);
+            }
+        }
+
+        function toggleUrlEditor() {
+            if (urlEditor.classList.contains('hidden')) {
+                urlEditor.classList.remove('hidden');
+                urlInput.focus();
+            } else {
+                urlEditor.classList.add('hidden');
+            }
+        }
+
+        function handleSelection(e) {
+            if (e && e.target && toolbar.contains(e.target)) return;
+
+            const selection = window.getSelection();
+
+            let target = selection.anchorNode ? (selection.anchorNode.nodeType === 3 ? selection.anchorNode.parentElement : selection.anchorNode) : null;
+            let link = target ? target.closest('a') : null;
+
+            if (link) {
+                currentLinkElement = link;
+                urlEditor.classList.remove('hidden');
+                urlInput.value = link.getAttribute('href') || '';
+                positionToolbar(link);
+                return;
+            } else {
+                urlEditor.classList.add('hidden');
+                currentLinkElement = null;
+            }
+
+            if (!selection.rangeCount || selection.isCollapsed) {
+                if (document.activeElement && document.activeElement.classList.contains('editable')) {
+                    positionToolbar(document.activeElement);
+                } else { toolbar.style.display = 'none'; }
+                return;
+            }
+
+            const range = selection.getRangeAt(0);
+            const parent = range.commonAncestorContainer.nodeType === 3 ? range.commonAncestorContainer.parentElement : range.commonAncestorContainer;
+            if (parent && parent.closest('.editable')) {
+                const rect = range.getBoundingClientRect();
+                toolbar.style.display = 'flex';
+                const leftPos = rect.left + (rect.width / 2) - (toolbar.offsetWidth / 2);
+                toolbar.style.left = `${Math.max(10, leftPos)}px`;
+                toolbar.style.top = `${window.scrollY + rect.top - toolbar.offsetHeight - 15}px`;
+            }
+        }
+
+        function positionToolbar(el) {
+            const rect = el.getBoundingClientRect();
+            toolbar.style.display = 'flex';
+            const leftPos = rect.left + (rect.width / 2) - (toolbar.offsetWidth / 2);
+            toolbar.style.left = `${Math.max(10, leftPos)}px`;
+            toolbar.style.top = `${window.scrollY + rect.top - toolbar.offsetHeight - 35}px`;
+        }
+
+        function downloadDocx() {
+            const content = document.getElementById('cover-letter').innerHTML;
+            const style = "body{font-family:Arial;line-height:1.6;font-size:11pt;color:#111827;}h1{margin-bottom:5px;font-size:24pt;text-transform:uppercase;}p{margin-bottom:15px;}a{color:#2563eb;text-decoration:none;}";
+            const fullHtml = "<!DOCTYPE html><html><head><meta charset='utf-8'><style>" + style + "<" + "/style><" + "/head><body>" + content + "<" + "/body><" + "/html>";
+
+            if (typeof htmlDocx === 'undefined') {
+                alert('Error: html-docx library not loaded.');
+                return;
+            }
+
+            const converted = htmlDocx.asBlob(fullHtml);
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(converted);
+            link.download = getFileName() + '.docx';
+            link.click();
+        }
+
+        document.addEventListener('mouseup', handleSelection);
+        document.addEventListener('keyup', handleSelection);
+        document.addEventListener('paste', function (e) {
+            if (e.target.classList.contains('editable')) {
+                e.preventDefault();
+                const text = (e.originalEvent || e).clipboardData.getData('text/plain');
+                document.execCommand('insertText', false, text);
+            }
+        });
+
+        document.getElementById('cover-letter').addEventListener('click', (e) => {
+            if (e.target.tagName === 'A') {
+                e.preventDefault();
+                handleSelection();
+            }
+        });
+    </script>
+</body>
+
+</html>
